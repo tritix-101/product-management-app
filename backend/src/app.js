@@ -15,7 +15,6 @@ app.use(
 app.use(express.json());
 
 app.use("/api/products", productRoutes);
-
 connectDb()
   .then(() => {
     console.log("Database connected successfully");
