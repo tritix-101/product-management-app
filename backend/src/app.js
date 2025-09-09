@@ -1,6 +1,7 @@
 const express = require("express");
 const { connectDb } = require("./config/database");
 const cors = require("cors");
+const productRoutes = require("./routes/productRoutes");
 
 const app = express();
 const port = 7777;
@@ -12,6 +13,8 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.use("/api/products", productRoutes);
 
 connectDb()
   .then(() => {
