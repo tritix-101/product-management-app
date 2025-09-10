@@ -3,20 +3,36 @@ const Product = require("../models/Product");
 
 const router = express.Router();
 
-// GET /api/products - fetch all products
+// GET /api/products - fetch all products (with search + sort)
 router.get("/", async (req, res) => {
   try {
-    const { name } = req.query;
+    const { name, sort = "asc" } = req.query;
     let query = {};
 
     if (name) {
-      query.name = { $regex: name, $options: "i" }; // case-insensitive search
+      query.name = { $regex: name, $options: "i" };
     }
 
-    const products = await Product.find(query).sort({ price: 1 }); // sorted by price
+    // sort by price dynamically
+    const sortOrder = sort === "desc" ? -1 : 1;
+
+    const products = await Product.find(query).sort({ price: sortOrder });
     res.json(products);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+
+// ✅ GET /api/products/:id - fetch a single product by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch product" });
   }
 });
 

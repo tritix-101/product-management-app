@@ -24,8 +24,12 @@ const productSchema = new mongoose.Schema(
       required: true,
       default: "General",
     },
+    imageUrl: {
+      type: String,
+      default: "",
+    },
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 const Product = mongoose.model("Product", productSchema);

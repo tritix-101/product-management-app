@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { addProduct } from "../api/productApi";
+import { useNavigate } from "react-router-dom";
 
-const AddProductForm = ({ onProductAdded }) => {
+const AddProductForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     price: "",
     description: "",
     category: "",
+    imageUrl: "",
   });
 
   const handleChange = (e) => {
@@ -16,52 +19,61 @@ const AddProductForm = ({ onProductAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const product = { ...formData, price: Number(formData.price) };
-      await addProduct(product);
+      await addProduct(formData);
       alert("Product added successfully!");
-      setFormData({ name: "", price: "", description: "", category: "" });
-      onProductAdded();
+      navigate("/");
     } catch (err) {
-      console.error("Error adding product:", err);
-      alert("Failed to add product.");
+      console.error("Error adding product", err);
+      alert("Failed to add product");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="name"
-        placeholder="Product Name"
-        value={formData.name}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="number"
-        name="price"
-        placeholder="Price"
-        value={formData.price}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="description"
-        placeholder="Description"
-        value={formData.description}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="category"
-        placeholder="Category"
-        value={formData.category}
-        onChange={handleChange}
-      />
-      <button type="submit">Add Product</button>
-    </form>
+    <div className="form-container">
+      <h2 >Add New Product</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Product Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          value={formData.price}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="description"
+          placeholder="Description"
+          value={formData.description}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="category"
+          placeholder="Category"
+          value={formData.category}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="imageUrl"
+          placeholder="Image URL"
+          value={formData.imageUrl}
+          onChange={handleChange}
+        />
+        <button type="submit">Add Product</button>
+      </form>
+    </div>
   );
 };
 

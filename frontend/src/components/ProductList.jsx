@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from "react";
-import ProductCard from "./ProductCard";
-import AddProductForm from "./AddProductForm";
-import EditProductForm from "./EditProductForm";
+import { useEffect, useState } from "react";
 import { getProducts, deleteProduct } from "../api/productApi";
+import ProductCard from "./ProductCard";
+import { useNavigate } from "react-router-dom";
 
-const ProductList = () => {
+function ProductList() {
   const [products, setProducts] = useState([]);
-  const [editingProduct, setEditingProduct] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("asc");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchProducts();
+  }, [sort]);
 
   const fetchProducts = async () => {
     try {
-      const res = await getProducts(searchTerm);
-      setProducts(res.data);
+      const response = await getProducts(search, sort);
+      setProducts(response.data);
     } catch (err) {
-      console.error("Error fetching products:", err);
+      console.error("Error fetching products", err);
     }
   };
 
@@ -24,51 +28,38 @@ const ProductList = () => {
         await deleteProduct(id);
         fetchProducts();
       } catch (err) {
-        console.error("Error deleting product:", err);
+        console.error("Error deleting product", err);
       }
     }
   };
 
-  const handleEdit = (product) => setEditingProduct(product);
-  const handleCloseEdit = () => setEditingProduct(null);
-  const handleSearchChange = (e) => setSearchTerm(e.target.value);
-
-  const handleSort = (order) => {
-    const sortedProducts = [...products].sort((a, b) =>
-      order === "asc" ? a.price - b.price : b.price - a.price
-    );
-    setProducts(sortedProducts);
+  const handleEdit = (id) => {
+    navigate(`/edit/${id}`);
   };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   return (
     <div>
-      <h2>Products</h2>
+      {/* 🔎 Search & Sort Section */}
+      <div className="search-sort-container">
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button onClick={fetchProducts}>Search</button>
+        </div>
 
-      <div className="search-sort">
-        <input
-          type="text"
-          placeholder="Search products by name"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <button onClick={fetchProducts}>Search</button>
-        <button onClick={() => handleSort("asc")}>Sort by Price ↑</button>
-        <button onClick={() => handleSort("desc")}>Sort by Price ↓</button>
+        <div className="sort-box">
+          <select value={sort} onChange={(e) => setSort(e.target.value)}>
+            <option value="asc">Low to High</option>
+            <option value="desc">High to Low</option>
+          </select>
+        </div>
       </div>
 
-      <AddProductForm onProductAdded={fetchProducts} />
-      {editingProduct && (
-        <EditProductForm
-          product={editingProduct}
-          onClose={handleCloseEdit}
-          onProductUpdated={fetchProducts}
-        />
-      )}
-
+      {/* 🛒 Product Grid */}
       <div className="product-grid">
         {products.map((product) => (
           <ProductCard
@@ -81,6 +72,6 @@ const ProductList = () => {
       </div>
     </div>
   );
-};
+}
 
 export default ProductList;

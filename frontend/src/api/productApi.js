@@ -2,12 +2,15 @@ import axios from "axios";
 
 const API_URL = "http://localhost:7777/api/products";
 
-export const getProducts = (search) =>
-  axios.get(API_URL, { params: { name: search || "" } });
+// get products (with optional search + sort)
+export const getProducts = (name = "", sort = "asc") =>
+  axios.get(API_URL, { params: { name, sort } });
 
-export const addProduct = (product) => axios.post(API_URL, product);
-
-export const editProduct = (id, updatedProduct) =>
-  axios.put(`${API_URL}/${id}`, updatedProduct);
+export const addProduct = async (product) => {
+  return axios.post(API_URL, product); // ✅ return promise
+};
 
 export const deleteProduct = (id) => axios.delete(`${API_URL}/${id}`);
+
+export const updateProduct = (id, product) =>
+  axios.put(`${API_URL}/${id}`, product); // ✅ add this
