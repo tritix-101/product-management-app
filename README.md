@@ -19,7 +19,8 @@ This project demonstrates my ability to work with **React (frontend)**, **Node.j
 ## 🛠️ Tech Stack
 - **Frontend:** React (Vite, React Router, Hooks, Functional Components)  
 - **Backend:** Node.js, Express.js  
-- **Database:** MongoDB (with Mongoose)  
+- **Database:** MongoDB (with Mongoose)
+- **Tools:** PostMan(for API calls testing), VScode
 
 ---
 
