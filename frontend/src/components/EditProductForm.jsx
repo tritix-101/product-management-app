@@ -23,7 +23,7 @@ const EditProductForm = () => {
           price: res.data.price || "",
           description: res.data.description || "",
           category: res.data.category || "",
-          imageUrl: res.data.imageUrl || "", // ✅ always fallback to empty string
+          imageUrl: res.data.imageUrl || "", 
         });
       } catch (err) {
         console.error("Error fetching product", err);

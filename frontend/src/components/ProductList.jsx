@@ -39,7 +39,7 @@ function ProductList() {
 
   return (
     <div>
-      {/* 🔎 Search & Sort Section */}
+      {/*Search & Sort Section */}
       <div className="search-sort-container">
         <div className="search-box">
           <input
@@ -59,7 +59,7 @@ function ProductList() {
         </div>
       </div>
 
-      {/* 🛒 Product Grid */}
+      {/*Product Grid */}
       <div className="product-grid">
         {products.map((product) => (
           <ProductCard
